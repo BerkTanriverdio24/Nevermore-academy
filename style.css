@@ -277,3 +277,17 @@ img { max-width: 100%; display: block; }
   width:100%; display:block; border-radius: var(--radius);
   border:1px solid rgba(107,47,165,.3); margin-bottom:22px;
 }
+
+/* ===== Schaduw & hover-effecten (hele site) ===== */
+.card{ box-shadow: 0 12px 34px rgba(0,0,0,.38); }
+.btn{ transition: transform .2s, box-shadow .2s, filter .2s; }
+@media (hover:hover){
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(107,47,165,.45); filter: brightness(1.08); }
+  .card:hover{ box-shadow: 0 20px 54px rgba(0,0,0,.5), 0 0 32px rgba(107,47,165,.35); }
+  .card:hover .thumb.photo{ filter: brightness(1.08) saturate(1.05); }
+  .nav-links a:hover{ color: var(--purple-lit); }
+  .more:hover{ color:#e7ddf5; }
+  .map-img:hover{ box-shadow: 0 16px 40px rgba(0,0,0,.5), 0 0 30px rgba(107,47,165,.3); }
+}
+.card .thumb.photo{ transition: filter .25s; }
+.map-img{ transition: box-shadow .25s; }

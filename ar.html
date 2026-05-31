@@ -80,11 +80,24 @@
       font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;animation:hintp 1.8s ease-in-out infinite;}
     @keyframes hintp{0%,100%{opacity:.45}50%{opacity:1}}
     .db-controls{display:flex;align-items:center;gap:14px;z-index:120;}
-    .db-controls button{cursor:pointer;font-family:"Cinzel",serif;letter-spacing:.06em;font-size:.78rem;color:#e7ddf5;
-      background:rgba(107,47,165,.32);border:1px solid rgba(154,78,224,.5);border-radius:12px;padding:11px 16px;}
+    .db-controls button{cursor:pointer;font-family:"Cinzel",serif;letter-spacing:.06em;font-size:.9rem;color:#e7ddf5;
+      background:rgba(107,47,165,.4);border:1px solid rgba(154,78,224,.6);border-radius:12px;padding:14px 22px;min-width:118px;
+      transition:transform .2s, background .2s, box-shadow .2s; box-shadow:0 8px 22px rgba(0,0,0,.4);}
     .db-controls button:disabled{opacity:.3;cursor:default;}
     .db-count{font-family:"Cinzel",serif;color:#b9a6dd;font-size:.72rem;letter-spacing:.12em;}
     @media (max-width:640px){ .db-page{padding:28px 22px 30px 32px;} .db-page h2{font-size:1.7rem;} }
+
+    /* ===== Schaduw & hover-effecten ===== */
+    .stage{ box-shadow:0 32px 90px rgba(0,0,0,.6), 0 0 70px rgba(107,47,165,.28); }
+    .db-cover{ will-change:transform; }
+    @media (hover:hover){
+      .db-controls button:hover:not(:disabled){ background:rgba(154,78,224,.6); transform:translateY(-3px);
+        box-shadow:0 14px 30px rgba(107,47,165,.5); }
+      .db-cover:hover{ box-shadow:0 34px 90px rgba(0,0,0,.75), 0 0 60px rgba(154,78,224,.6); }
+      .step{ transition:transform .25s, box-shadow .25s, border-color .25s; }
+      .step:hover{ transform:translateY(-4px); border-color:rgba(154,78,224,.55);
+        box-shadow:0 16px 40px rgba(0,0,0,.45), 0 0 26px rgba(107,47,165,.3); }
+    }
   </style>
 </head>
 <body>
@@ -140,7 +153,8 @@
       <div class="secret">
         <div class="q">"Niet alles wat geschreven staat,<br/>mocht ooit gelezen worden."</div>
         <span class="src">— uit het Nevermore-archief</span>
-        <div style="margin-top:18px"><button id="openDiary" class="btn btn-primary">Open het dagboek</button></div>
+        <div style="margin-top:18px"><button id="openDiary" class="btn btn-primary" style="font-size:1.02rem;padding:16px 30px">Open het dagboek</button></div>
+        <p class="muted" style="margin-top:10px;font-size:.82rem">Het boek opent vanzelf — blader met de knoppen <em>Vorige</em> en <em>Volgende</em>.</p>
       </div>
 
       <div class="ar-controls">
@@ -209,7 +223,7 @@
         setTimeout(function(){ page.classList.remove("turn-in"); animating=false; },560); },470);
     }
     function openBook(){ book.classList.add("open"); opened=true; }
-    function openModal(){ i=0; render(0); book.classList.remove("open"); opened=false; modal.classList.add("open"); }
+    function openModal(){ i=0; render(0); book.classList.remove("open"); opened=false; modal.classList.add("open"); setTimeout(openBook,450); }
     function closeModal(){ modal.classList.remove("open"); }
     el("openDiary").addEventListener("click",openModal);
     el("diaryClose").addEventListener("click",closeModal);
