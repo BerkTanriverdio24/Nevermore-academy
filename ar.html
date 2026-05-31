@@ -41,6 +41,31 @@
       model-viewer{ height:54vh; }
       .secret .q{ font-size:1.1rem; }
     }
+
+    /* ===== Open-het-dagboek modal ===== */
+    .diary-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+      background:rgba(8,5,14,.85);backdrop-filter:blur(6px);padding:18px;}
+    .diary-modal.open{display:flex;}
+    .diary-book{position:relative;width:min(560px,100%);max-height:88vh;display:flex;flex-direction:column;
+      background:linear-gradient(160deg,#241634,#160d22);border:1px solid rgba(154,78,224,.5);border-radius:16px;
+      box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 50px rgba(107,47,165,.35);overflow:hidden;}
+    .diary-book::before{content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;
+      box-shadow:inset 0 0 70px rgba(0,0,0,.65);}
+    .diary-page{padding:40px 30px 22px;overflow:auto;}
+    .diary-page .de{font-family:"Cinzel",serif;text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;color:#9a4ee0;}
+    .diary-page h2{font-family:"UnifrakturMaguntia",serif;color:#cba6f0;font-size:2.1rem;margin:8px 0 16px;
+      text-shadow:0 0 16px rgba(154,78,224,.5);line-height:1.1;}
+    .diary-page p{color:#cdc6da;font-size:1rem;line-height:1.75;margin:0;}
+    .diary-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:14px 22px;border-top:1px solid rgba(154,78,224,.25);}
+    .diary-nav button{cursor:pointer;font-family:"Cinzel",serif;letter-spacing:.06em;font-size:.76rem;
+      background:rgba(107,47,165,.28);color:#e7ddf5;border:1px solid rgba(154,78,224,.45);border-radius:10px;padding:10px 14px;}
+    .diary-nav button:disabled{opacity:.3;cursor:default;}
+    .diary-count{font-family:"Cinzel",serif;color:#8a7ca8;font-size:.72rem;letter-spacing:.14em;}
+    .diary-close{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;
+      background:rgba(21,18,28,.75);border:1px solid rgba(154,78,224,.4);color:#cba6f0;font-size:1rem;cursor:pointer;}
+    .dfade{animation:dfade .35s ease;}
+    @keyframes dfade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   </style>
 </head>
 <body>
@@ -69,7 +94,7 @@
       <div class="steps">
         <div class="step"><div class="n">1</div><h3>Bekijk</h3><p>Het dagboek zweeft en draait vanzelf rond.</p></div>
         <div class="step"><div class="n">2</div><h3>Plaats in AR</h3><p>Tik op je telefoon op "Bekijk in jouw ruimte".</p></div>
-        <div class="step"><div class="n">3</div><h3>Ontdek</h3><p>Lees de geheime boodschap uit het archief.</p></div>
+        <div class="step"><div class="n">3</div><h3>Ontdek</h3><p>Open het dagboek en lees het verborgen archief.</p></div>
       </div>
 
       <div class="stage">
@@ -96,6 +121,7 @@
       <div class="secret">
         <div class="q">"Niet alles wat geschreven staat,<br/>mocht ooit gelezen worden."</div>
         <span class="src">— uit het Nevermore-archief</span>
+        <div style="margin-top:18px"><button id="openDiary" class="btn btn-primary">Open het dagboek</button></div>
       </div>
 
       <div class="ar-controls">
@@ -108,5 +134,63 @@
     <div class="container"><p class="copy">© 2026 Nevermore Academy · Fictief studentenproject voor User Interaction (DP12)</p></div>
   </footer>
   <script src="main.js"></script>
+
+  <!-- ===== Het dagboek van het archief ===== -->
+  <div class="diary-modal" id="diaryModal" role="dialog" aria-modal="true" aria-label="Het dagboek van het archief">
+    <div class="diary-book">
+      <button class="diary-close" id="diaryClose" aria-label="Sluiten">&#10005;</button>
+      <div class="diary-page dfade" id="diaryPage"></div>
+      <div class="diary-nav">
+        <button id="diaryPrev">&lsaquo; Vorige</button>
+        <span class="diary-count" id="diaryCount"></span>
+        <button id="diaryNext">Volgende &rsaquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var pages=[
+      {e:"Het verborgen dagboek", t:"Het Archief",
+       b:"Wie dit leest, heeft gevonden wat verborgen had moeten blijven. Dit dagboek hoort bij het archief van Nevermore \u2014 de geschiedenis die niet op de offici\u00eble website staat. Blader verder, als je durft."},
+      {e:"Anno 1791", t:"Een Toevlucht",
+       b:"Nevermore Academy werd gesticht voor hen die nergens anders welkom waren. Achter de poorten in Jericho leerden de eerste leerlingen dat anders-zijn geen vloek is, maar een gave. De buitenwereld noemde hen outcasts; hier noemden ze elkaar familie."},
+      {e:"De leerlingen", t:"De Outcasts",
+       b:"Onder dit dak leven talenten die de gewone wereld niet kan plaatsen: zij die de nacht beter zien dan de dag, zij die planten laten fluisteren, zij die de toekomst in inkt vangen. Elke leerling draagt een geheim \u2014 en de school bewaart ze allemaal."},
+      {e:"1991", t:"De Brand",
+       b:"Niemand spreekt graag over de brand in de noordvleugel. De offici\u00eble lezing noemt een omgevallen kaars. Het archief bewaart een ander verhaal: over een experiment dat te ver ging, en een kamer die sindsdien verzegeld bleef. Sommige deuren blijven beter dicht."},
+      {e:"Heden", t:"Directrice Weems",
+       b:"Vandaag waakt directrice Larissa Weems over Nevermore. \u201cDeze school is geen gebouw,\u201d schrijft ze, \u201cmaar een belofte: dat je hier eindelijk thuiskomt.\u201d Wat zij precies beschermt, staat in geen enkel lesboek."},
+      {e:"Een waarschuwing", t:"Sluit het boek",
+       b:"Je hebt het archief gezien. Onthoud: niet alles wat geschreven staat, mocht ooit gelezen worden. Sluit het dagboek \u2014 en kijk voortaan twee keer naar wat een gewone schoolwebsite lijkt."}
+    ];
+    var i=0;
+    var modal=document.getElementById("diaryModal");
+    var pageEl=document.getElementById("diaryPage");
+    var prev=document.getElementById("diaryPrev");
+    var next=document.getElementById("diaryNext");
+    var count=document.getElementById("diaryCount");
+    function render(){
+      var p=pages[i];
+      pageEl.innerHTML='<div class="de">'+p.e+'</div><h2>'+p.t+'</h2><p>'+p.b+'</p>';
+      pageEl.classList.remove("dfade"); void pageEl.offsetWidth; pageEl.classList.add("dfade");
+      count.textContent="Bladzijde "+(i+1)+" / "+pages.length;
+      prev.disabled=(i===0); next.disabled=(i===pages.length-1);
+    }
+    function open(){ i=0; render(); modal.classList.add("open"); }
+    function close(){ modal.classList.remove("open"); }
+    document.getElementById("openDiary").addEventListener("click",open);
+    document.getElementById("diaryClose").addEventListener("click",close);
+    prev.addEventListener("click",function(){ if(i>0){i--;render();} });
+    next.addEventListener("click",function(){ if(i<pages.length-1){i++;render();} });
+    modal.addEventListener("click",function(e){ if(e.target===modal) close(); });
+    document.addEventListener("keydown",function(e){
+      if(!modal.classList.contains("open"))return;
+      if(e.key==="Escape")close();
+      if(e.key==="ArrowRight"&&i<pages.length-1){i++;render();}
+      if(e.key==="ArrowLeft"&&i>0){i--;render();}
+    });
+  })();
+  </script>
 </body>
 </html>
