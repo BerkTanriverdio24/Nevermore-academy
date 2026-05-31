@@ -2,112 +2,111 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Betreed het Archief — Nevermore Academy AR</title>
-  <meta name="description" content="Scan het Nevermore-wapen en het verborgen dagboek uit het archief verschijnt." />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
-  <!-- A-Frame + AR.js (image/marker tracking). Laadt in de browser; werkt op telefoon via https. -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
+  <meta name="description" content="Het verborgen dagboek uit het Nevermore-archief, in 3D en AR." />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
   <style>
-    html,body { margin:0; padding:0; overflow:hidden; font-family:"Inter",sans-serif; background:#000; }
-    .ui { position:fixed; z-index:20; left:0; right:0; pointer-events:none; }
-    .top { top:0; padding:14px 18px; display:flex; justify-content:space-between; align-items:center;
-           background:linear-gradient(180deg, rgba(10,10,10,.9), transparent); }
-    .top b { font-family:"Cinzel",serif; color:#f4f1f7; letter-spacing:.16em; font-size:.8rem; text-transform:uppercase; }
-    .top a { pointer-events:auto; color:#cba6f0; font-family:"Cinzel",serif; font-size:.72rem; letter-spacing:.1em;
-             text-decoration:none; text-transform:uppercase; background:rgba(21,18,28,.6);
-             padding:8px 12px; border:1px solid rgba(154,78,224,.4); border-radius:10px; }
-    .steps { top:62px; display:flex; gap:8px; justify-content:center; padding:0 14px; }
-    .step { background:rgba(21,18,28,.78); border:1px solid rgba(154,78,224,.4); border-radius:12px;
-            padding:8px 12px; max-width:160px; backdrop-filter:blur(6px); }
-    .step .n { font-family:"Cinzel",serif; color:#cba6f0; font-size:.7rem; letter-spacing:.1em; }
-    .step p { margin:2px 0 0; font-size:.72rem; color:#B5B8BE; line-height:1.3; }
-    .hint { bottom:26px; text-align:center; padding:0 16px; }
-    .hint .card { display:inline-block; background:rgba(21,18,28,.84); border:1px solid rgba(154,78,224,.5);
-                  border-radius:16px; padding:14px 20px; max-width:460px; backdrop-filter:blur(8px); }
-    .hint .g { font-family:"UnifrakturMaguntia",serif; color:#cba6f0; font-size:1.5rem;
-               text-shadow:0 0 18px rgba(154,78,224,.7); }
-    .hint p { margin:6px 0 0; font-size:.85rem; color:#B5B8BE; }
-    .hint.found .g::after { content:" ✦"; }
-    .hint.found .scanning { display:none; }
-    .hint .found-msg { display:none; }
-    .hint.found .found-msg { display:block; }
-    /* AR.js video full screen achter de scene */
-    .a-canvas, video { position:fixed !important; top:0; left:0; width:100% !important; height:100% !important; object-fit:cover; }
+    .ar-wrap { padding: 110px 0 70px; }
+    .steps { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin: 26px 0 30px; }
+    .step { background: linear-gradient(180deg,var(--panel-2,#1a1422),var(--panel,#120d18));
+            border:1px solid rgba(107,47,165,.22); border-radius:16px; padding:18px; text-align:center; }
+    .step .n { width:40px;height:40px;margin:0 auto 10px; border-radius:50%; display:grid;place-items:center;
+               font-family:"Cinzel",serif; color:#fff; background:linear-gradient(135deg,#6B2FA5,#3c1860);
+               box-shadow:0 0 20px rgba(154,78,224,.5); }
+    .step h3 { font-size:.95rem; margin-bottom:4px; }
+    .step p { font-size:.82rem; color:#9a93a8; }
+    .stage { position:relative; border:1px solid rgba(154,78,224,.4); border-radius:22px; overflow:hidden;
+             background: radial-gradient(70% 90% at 50% 0%, rgba(107,47,165,.4), transparent 65%),
+                         linear-gradient(180deg,#160f24,#0b0712); min-height:60vh; }
+    model-viewer { width:100%; height:60vh; --poster-color:transparent; }
+    .floating { position:absolute; top:14px; left:0; right:0; text-align:center; pointer-events:none; z-index:2; }
+    .floating .g { font-family:"UnifrakturMaguntia",serif; color:#cba6f0; font-size:1.5rem;
+                   text-shadow:0 0 18px rgba(154,78,224,.7); }
+    .secret { margin:22px auto 0; max-width:540px; text-align:center;
+              background:rgba(107,47,165,.12); border:1px solid rgba(154,78,224,.35);
+              border-radius:16px; padding:18px 22px; }
+    .secret .q { font-family:"UnifrakturMaguntia",serif; color:#cba6f0; font-size:1.35rem; line-height:1.4;
+                 text-shadow:0 0 14px rgba(154,78,224,.5); }
+    .secret .src { display:block; margin-top:8px; color:#7d5aa8; font-size:.8rem; letter-spacing:.05em; }
+    .ar-controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:24px; }
+    .ar-btn { position:absolute; bottom:18px; left:50%; transform:translateX(-50%); }
+    @media (max-width: 640px){
+      .ar-wrap{ padding: 96px 0 60px; }
+      .steps{ grid-template-columns: 1fr; gap:10px; margin:20px 0 24px; }
+      .step{ text-align:left; display:flex; align-items:center; gap:12px; padding:12px 14px; }
+      .step .n{ margin:0; flex:0 0 auto; }
+      model-viewer{ height:54vh; }
+      .secret .q{ font-size:1.1rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="ui top">
-    <b>Nevermore · Archief</b>
-    <a href="index.html">← Terug naar de site</a>
-  </div>
-
-  <div class="ui steps">
-    <div class="step"><div class="n">1 · Camera</div><p>Geef je camera toestemming.</p></div>
-    <div class="step"><div class="n">2 · Scan</div><p>Richt op het Nevermore-wapen.</p></div>
-    <div class="step"><div class="n">3 · Ontdek</div><p>Het dagboek verschijnt erboven.</p></div>
-  </div>
-
-  <div class="ui hint" id="hint">
-    <div class="card">
-      <div class="g">Betreed het archief</div>
-      <p class="scanning">Houd je camera op het Nevermore-wapen — het verborgen dagboek komt tevoorschijn.</p>
-      <p class="found-msg">Je hebt het archief geopend. Beweeg rustig om het dagboek heen.</p>
+  <nav class="nav">
+    <div class="container">
+      <a class="brand" href="index.html"><svg class="crest" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 3l18 7v12c0 11-8 19-18 23C14 41 6 33 6 22V10l18-7z" stroke="#9a4ee0" stroke-width="2" fill="rgba(107,47,165,.12)"/><path d="M24 13c-4 3-7 4-9 4 0 0 2 6 9 10 7-4 9-10 9-10-2 0-5-1-9-4z" fill="#9a4ee0"/></svg><b>Nevermore Academy</b></a>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="opleidingen.html">Opleidingen</a>
+        <a href="geschiedenis.html">Geschiedenis</a>
+        <a href="nieuws.html">Nieuws</a>
+        <a href="contact.html">Contact</a>
+        <a href="ar.html" class="nav-cta active">Betreed het archief</a>
+        <a href="ar.html" class="nav-cta nav-cta-mobile">Betreed het archief</a>
+      </div>
     </div>
-  </div>
+  </nav>
 
-  <a-scene
-      vr-mode-ui="enabled: false"
-      renderer="colorManagement: true; physicallyCorrectLights: true;"
-      arjs="sourceType: webcam; detectionMode: mono; patternRatio: 0.5; matrixCodeType: 3x3; debugUIEnabled: false;">
+  <main class="ar-wrap">
+    <div class="container">
+      <p class="eyebrow center">De verborgen laag</p>
+      <h1 class="center gothic" style="font-size:clamp(2rem,5vw,3rem)">Betreed het Archief</h1>
+      <p class="center muted" style="max-width:560px;margin:14px auto 0">Het Nevermore-archief bewaart een dagboek dat niemand mocht inzien. Hieronder zie je het in 3D — op je telefoon kun je het in je eigen kamer laten verschijnen.</p>
 
-    <!-- Het gescande Nevermore-wapen -->
-    <a-marker id="marker" type="pattern" url="nevermore.patt" smooth="true" smoothCount="6" smoothTolerance="0.01">
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3>Bekijk</h3><p>Het dagboek zweeft en draait vanzelf rond.</p></div>
+        <div class="step"><div class="n">2</div><h3>Plaats in AR</h3><p>Tik op je telefoon op "Bekijk in jouw ruimte".</p></div>
+        <div class="step"><div class="n">3</div><h3>Ontdek</h3><p>Lees de geheime boodschap uit het archief.</p></div>
+      </div>
 
-      <!-- HET ZWEVENDE DAGBOEK: draait rustig rond én beweegt licht op-en-neer (DP11-idee) -->
-      <a-entity
-          animation__bob="property: object3D.position.y; from: 0.70; to: 0.95; dir: alternate; dur: 2200; loop: true; easing: easeInOutSine"
-          animation__spin="property: rotation; from: 0 0 0; to: 0 360 0; dur: 14000; loop: true; easing: linear"
-          position="0 0.7 0">
+      <div class="stage">
+        <div class="floating"><span class="g">Het verborgen dagboek</span></div>
+        <model-viewer
+            id="mv"
+            src="diary.glb"
+            alt="Een zwevend, ronddraaiend dagboek uit het Nevermore-archief"
+            camera-controls
+            autoplay
+            animation-name="FloatSpin"
+            interaction-prompt="none"
+            shadow-intensity="1"
+            environment-image="neutral"
+            exposure="1.05"
+            camera-orbit="0deg 78deg 3.2m"
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            ar-scale="auto">
+          <button slot="ar-button" class="btn btn-primary ar-btn">Bekijk in jouw ruimte (AR)</button>
+        </model-viewer>
+      </div>
 
-        <!-- boekblok (paars, lichte gloed) -->
-        <a-box width="0.62" height="0.86" depth="0.16"
-               material="color:#3c1860; emissive:#1a0c2e; emissiveIntensity:0.5; roughness:0.7; metalness:0.15"></a-box>
-        <!-- bladzijden (crème) langs de rand -->
-        <a-box width="0.06" height="0.80" depth="0.15" position="0.30 0 0" color="#e8e2d0"></a-box>
-        <!-- ingelegde cover -->
-        <a-box width="0.52" height="0.78" depth="0.02" position="0 0 0.085"
-               material="color:#2a1148; emissive:#160a26; emissiveIntensity:0.4"></a-box>
-        <!-- embleem op de cover -->
-        <a-circle radius="0.15" position="0 0.07 0.10" color="#1c1330"></a-circle>
-        <a-text value="N" align="center" position="0 0.07 0.105" width="2.4" color="#cba6f0"></a-text>
-        <a-text value="ARCHIEF" align="center" position="0 -0.24 0.10" width="1.5" color="#9a4ee0"></a-text>
-      </a-entity>
+      <div class="secret">
+        <div class="q">"Niet alles wat geschreven staat,<br/>mocht ooit gelezen worden."</div>
+        <span class="src">— uit het Nevermore-archief</span>
+      </div>
 
-      <!-- DE GEHEIME BOODSCHAP uit het archief, zwevend ernaast -->
-      <a-entity position="0 1.55 0" rotation="-18 0 0"
-                animation="property: object3D.position.y; from: 1.55; to: 1.66; dir: alternate; dur: 2600; loop: true; easing: easeInOutSine">
-        <a-text value="Niet alles wat geschreven staat," align="center" width="2.6" position="0 0.12 0" color="#cba6f0"></a-text>
-        <a-text value="mocht ooit gelezen worden." align="center" width="2.6" position="0 0 0" color="#cba6f0"></a-text>
-        <a-text value="— uit het Nevermore-archief" align="center" width="1.8" position="0 -0.16 0" color="#7d5aa8"></a-text>
-      </a-entity>
+      <div class="ar-controls">
+        <a href="index.html" class="btn btn-ghost">Terug naar de site</a>
+      </div>
+    </div>
+  </main>
 
-      <!-- sfeerlicht -->
-      <a-light type="point" color="#9a4ee0" intensity="1.8" position="0 1.4 0.6"></a-light>
-      <a-light type="ambient" color="#4a3570" intensity="0.9"></a-light>
-    </a-marker>
-
-    <a-entity camera></a-entity>
-  </a-scene>
-
-  <script>
-    var marker = document.getElementById('marker');
-    var hint = document.getElementById('hint');
-    if (marker) {
-      marker.addEventListener('markerFound', function () { hint.classList.add('found'); });
-      marker.addEventListener('markerLost',  function () { hint.classList.remove('found'); });
-    }
-  </script>
+  <footer class="footer">
+    <div class="container"><p class="copy">© 2026 Nevermore Academy · Fictief studentenproject voor User Interaction (DP12)</p></div>
+  </footer>
+  <script src="main.js"></script>
 </body>
 </html>
