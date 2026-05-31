@@ -139,7 +139,7 @@
             autoplay
             animation-name="FloatSpin"
             interaction-prompt="none"
-            shadow-intensity="1"
+            shadow-intensity="2" shadow-softness="1"
             environment-image="neutral"
             exposure="1.05"
             camera-orbit="0deg 78deg 3.2m"
@@ -154,7 +154,7 @@
         <div class="q">"Niet alles wat geschreven staat,<br/>mocht ooit gelezen worden."</div>
         <span class="src">— uit het Nevermore-archief</span>
         <div style="margin-top:18px"><button id="openDiary" class="btn btn-primary" style="font-size:1.02rem;padding:16px 30px">Open het dagboek</button></div>
-        <p class="muted" style="margin-top:10px;font-size:.82rem">Het boek opent vanzelf — blader met de knoppen <em>Vorige</em> en <em>Volgende</em>.</p>
+        <p class="muted" style="margin-top:10px;font-size:.82rem">Tik op de kaft om het te openen, blader daarna met <em>Vorige</em> en <em>Volgende</em>.</p>
       </div>
 
       <div class="ar-controls">
@@ -223,7 +223,7 @@
         setTimeout(function(){ page.classList.remove("turn-in"); animating=false; },560); },470);
     }
     function openBook(){ book.classList.add("open"); opened=true; }
-    function openModal(){ i=0; render(0); book.classList.remove("open"); opened=false; modal.classList.add("open"); setTimeout(openBook,450); }
+    function openModal(){ i=0; render(0); book.classList.remove("open"); opened=false; modal.classList.add("open"); }
     function closeModal(){ modal.classList.remove("open"); }
     el("openDiary").addEventListener("click",openModal);
     el("diaryClose").addEventListener("click",closeModal);
