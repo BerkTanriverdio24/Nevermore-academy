@@ -98,6 +98,16 @@
       .step:hover{ transform:translateY(-4px); border-color:rgba(154,78,224,.55);
         box-shadow:0 16px 40px rgba(0,0,0,.45), 0 0 26px rgba(107,47,165,.3); }
     }
+
+    /* ===== Levende schaduw/gloed rond het boek ===== */
+    .stage{ transition: box-shadow .3s, transform .3s; animation: auraPulse 3.6s ease-in-out infinite; }
+    @keyframes auraPulse{
+      0%,100%{ box-shadow:0 30px 90px rgba(0,0,0,.55), 0 0 46px rgba(107,47,165,.22); }
+      50%{ box-shadow:0 40px 108px rgba(0,0,0,.62), 0 0 96px rgba(154,78,224,.52); }
+    }
+    .stage:active{ transform: scale(1.012); box-shadow:0 44px 116px rgba(0,0,0,.66), 0 0 110px rgba(154,78,224,.62); }
+    @media (hover:hover){ .stage:hover{ box-shadow:0 44px 116px rgba(0,0,0,.66), 0 0 110px rgba(154,78,224,.62); } }
+    @media (prefers-reduced-motion: reduce){ .stage{ animation:none; } }
   </style>
 </head>
 <body>
