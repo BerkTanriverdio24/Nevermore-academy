@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opleidingen — Nevermore Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="container">
+      <a class="brand" href="index.html"><svg class="crest" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 3l18 7v12c0 11-8 19-18 23C14 41 6 33 6 22V10l18-7z" stroke="#9a4ee0" stroke-width="2" fill="rgba(107,47,165,.12)"/><path d="M24 13c-4 3-7 4-9 4 0 0 2 6 9 10 7-4 9-10 9-10-2 0-5-1-9-4z" fill="#9a4ee0"/></svg><b>Nevermore Academy</b></a>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="opleidingen.html" class="active">Opleidingen</a>
+        <a href="geschiedenis.html">Geschiedenis</a>
+        <a href="nieuws.html">Nieuws</a>
+        <a href="contact.html">Contact</a>
+        <a href="ar.html" class="nav-cta">Betreed het archief</a>
+        <a href="ar.html" class="nav-cta nav-cta-mobile">Betreed het archief</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-head">
+    <div class="container">
+      <p class="eyebrow">Ons cursusaanbod</p>
+      <h1>Opleidingen</h1>
+      <p>Filter op categorie en ontdek waar jouw gave het best tot zijn recht komt.</p>
+    </div>
+  </header>
+
+  <section class="section" style="padding-top:10px">
+    <div class="container">
+      <div class="filters" role="group" aria-label="Filter opleidingen op categorie">
+        <button class="filter active" data-filter="alle" aria-pressed="true">Alle vakken</button>
+        <button class="filter" data-filter="wetenschappen" aria-pressed="false">Wetenschappen</button>
+        <button class="filter" data-filter="kunsten" aria-pressed="false">Kunsten</button>
+        <button class="filter" data-filter="sport" aria-pressed="false">Sport</button>
+        <button class="filter" data-filter="geschiedenis" aria-pressed="false">Geschiedenis</button>
+      </div>
+
+      <div class="grid grid-3">
+        <article class="card reveal" data-cat="wetenschappen">
+          <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#9a4ee0" stroke-width="1.4"><path d="M12 3v18M5 8c4 0 7 2 7 6M19 8c-4 0-7 2-7 6"/></svg></div>
+          <div class="body"><h3>Botanische Alchemie</h3><p>Plantenkunde voor de gevorderde leerling, met focus op nachtschade en zeldzame kruiden.</p><a class="more" href="vak-detail.html">Meer info</a></div>
+        </article>
+        <article class="card reveal" data-cat="sport">
+          <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#9a4ee0" stroke-width="1.4"><path d="M4 4l16 16M20 4L4 20"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="body"><h3>Schermen &amp; Klassieke Bewapening</h3><p>Voor leerlingen die hun reflexen en eer willen aanscherpen.</p><a class="more" href="vak-detail.html">Meer info</a></div>
+        </article>
+        <article class="card reveal" data-cat="kunsten">
+          <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#9a4ee0" stroke-width="1.4"><path d="M6 4h9l3 3v13H6zM9 9h6M9 13h6"/></svg></div>
+          <div class="body"><h3>Lyrische Compositie</h3><p>De kunst van het schrijven, dichten en muziek componeren.</p><a class="more" href="vak-detail.html">Meer info</a></div>
+        </article>
+        <article class="card reveal" data-cat="geschiedenis">
+          <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#9a4ee0" stroke-width="1.4"><path d="M4 5h16v14H4z"/><path d="M8 5v14M4 9h4M4 13h4"/></svg></div>
+          <div class="body"><h3>Geschiedenis van de Outcasts</h3><p>Van Goody Addams tot vandaag: onze afkomst, onze strijd.</p><a class="more" href="vak-detail.html">Meer info</a></div>
+        </article>
+        <article class="card reveal" data-cat="kunsten">
+          <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#9a4ee0" stroke-width="1.4"><path d="M3 17l6-6 4 4 8-8"/><circle cx="6" cy="9" r="2"/></svg></div>
+          <div class="body"><h3>Beeldende Kunsten</h3><p>Atelier, sculptuur en schilderkunst in het maanlicht.</p><a class="more" href="vak-detail.html">Meer info</a></div>
+        </article>
+        <article class="card secret reveal" data-cat="wetenschappen">
+          <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="#c79bf0" stroke-width="1.4"><path d="M12 2l2.5 7H22l-6 4.5L18.5 22 12 17.5 5.5 22 8 13.5 2 9h7.5z"/></svg></div>
+          <div class="body"><h3 class="gothic" style="font-size:1.2rem">Bijzondere Talenten</h3><p>Een vak waarin elke leerling zijn unieke gave ontwikkelt — voor wie nergens anders past.</p><a class="more" href="vak-detail.html">Meer info</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="copy">© 2026 Nevermore Academy · Fictief studentenproject voor User Interaction (DP12)</p>
+    </div>
+  </footer>
+  <script src="main.js"></script>
+</body>
+</html>
