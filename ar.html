@@ -42,30 +42,49 @@
       .secret .q{ font-size:1.1rem; }
     }
 
-    /* ===== Open-het-dagboek modal ===== */
-    .diary-modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
-      background:rgba(8,5,14,.85);backdrop-filter:blur(6px);padding:18px;}
-    .diary-modal.open{display:flex;}
-    .diary-book{position:relative;width:min(560px,100%);max-height:88vh;display:flex;flex-direction:column;
-      background:linear-gradient(160deg,#241634,#160d22);border:1px solid rgba(154,78,224,.5);border-radius:16px;
-      box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 50px rgba(107,47,165,.35);overflow:hidden;}
-    .diary-book::before{content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;
-      box-shadow:inset 0 0 70px rgba(0,0,0,.65);}
-    .diary-page{padding:40px 30px 22px;overflow:auto;}
-    .diary-page .de{font-family:"Cinzel",serif;text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;color:#9a4ee0;}
-    .diary-page h2{font-family:"UnifrakturMaguntia",serif;color:#cba6f0;font-size:2.1rem;margin:8px 0 16px;
-      text-shadow:0 0 16px rgba(154,78,224,.5);line-height:1.1;}
-    .diary-page p{color:#cdc6da;font-size:1rem;line-height:1.75;margin:0;}
-    .diary-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;
-      padding:14px 22px;border-top:1px solid rgba(154,78,224,.25);}
-    .diary-nav button{cursor:pointer;font-family:"Cinzel",serif;letter-spacing:.06em;font-size:.76rem;
-      background:rgba(107,47,165,.28);color:#e7ddf5;border:1px solid rgba(154,78,224,.45);border-radius:10px;padding:10px 14px;}
-    .diary-nav button:disabled{opacity:.3;cursor:default;}
-    .diary-count{font-family:"Cinzel",serif;color:#8a7ca8;font-size:.72rem;letter-spacing:.14em;}
-    .diary-close{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;
-      background:rgba(21,18,28,.75);border:1px solid rgba(154,78,224,.4);color:#cba6f0;font-size:1rem;cursor:pointer;}
-    .dfade{animation:dfade .35s ease;}
-    @keyframes dfade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    /* ===== Het opendraaiende dagboek ===== */
+    .db-modal{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;align-items:center;
+      justify-content:center;gap:20px;padding:20px;
+      background:radial-gradient(80% 80% at 50% 18%,rgba(46,24,82,.72),rgba(6,4,12,.97));backdrop-filter:blur(8px);}
+    .db-modal.open{display:flex;}
+    .db-x{position:fixed;top:16px;right:16px;z-index:130;width:44px;height:44px;border-radius:50%;
+      background:rgba(21,18,28,.82);border:1px solid rgba(154,78,224,.45);color:#cba6f0;font-size:1.1rem;cursor:pointer;}
+    .db-stage{perspective:2000px;width:min(460px,92vw);}
+    .db-book{position:relative;width:100%;height:min(74vh,600px);transform-style:preserve-3d;}
+    .db-paper{position:absolute;inset:0;border-radius:6px 12px 12px 6px;
+      background:linear-gradient(155deg,#e6dac0,#d8c9a8);box-shadow:0 26px 70px rgba(0,0,0,.6);}
+    .db-page{position:absolute;inset:0;z-index:3;border-radius:6px 12px 12px 6px;padding:36px 30px 34px 46px;
+      color:#2a2016;transform-origin:left center;backface-visibility:hidden;
+      background:linear-gradient(155deg,#efe7d2,#e4d8be);box-shadow:0 26px 70px rgba(0,0,0,.5);}
+    .db-page::before{content:"";position:absolute;left:0;top:0;bottom:0;width:30px;border-radius:6px 0 0 6px;
+      background:linear-gradient(90deg,rgba(80,50,20,.30),transparent);}
+    .db-page.turn-out{animation:turnout .48s ease forwards;}
+    .db-page.turn-in{animation:turnin .55s ease;}
+    @keyframes turnout{to{transform:rotateY(-108deg);opacity:0}}
+    @keyframes turnin{from{transform:rotateY(72deg);opacity:0}to{transform:rotateY(0);opacity:1}}
+    .db-de{font-family:"Cinzel",serif;text-transform:uppercase;letter-spacing:.2em;font-size:.64rem;color:#7a4a14;}
+    .db-page h2{font-family:"UnifrakturMaguntia",serif;color:#3a1d5e;font-size:2rem;line-height:1.05;margin:6px 0 8px;}
+    .db-rule{height:1px;background:linear-gradient(90deg,transparent,#9a6a2a 40%,#9a6a2a 60%,transparent);margin:0 0 16px;}
+    .db-page p{font-size:1rem;line-height:1.8;font-family:Georgia,"Times New Roman",serif;}
+    .db-dropcap{float:left;font-family:"UnifrakturMaguntia",serif;font-size:3.4rem;line-height:.78;
+      color:#6B2FA5;margin:6px 10px -4px 0;}
+    .db-folio{position:absolute;left:0;right:0;bottom:14px;text-align:center;font-family:"Cinzel",serif;
+      font-size:.6rem;letter-spacing:.16em;color:#8a6a3a;}
+    .db-cover{position:absolute;inset:0;z-index:6;border-radius:6px 12px 12px 6px;cursor:pointer;
+      background-size:cover;background-position:center;transform-origin:left center;backface-visibility:hidden;
+      transition:transform 1s cubic-bezier(.2,.7,.2,1),box-shadow 1s;
+      box-shadow:0 26px 70px rgba(0,0,0,.65),inset 0 0 70px rgba(0,0,0,.4);}
+    .db-book.open .db-cover{transform:rotateY(-170deg);box-shadow:0 8px 24px rgba(0,0,0,.4);pointer-events:none;}
+    .db-hint{position:absolute;left:0;right:0;bottom:20px;text-align:center;color:#efe6ff;font-family:"Cinzel",serif;
+      font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;animation:hintp 1.8s ease-in-out infinite;}
+    @keyframes hintp{0%,100%{opacity:.45}50%{opacity:1}}
+    .db-controls{display:flex;align-items:center;gap:14px;z-index:120;}
+    .db-controls button{cursor:pointer;font-family:"Cinzel",serif;letter-spacing:.06em;font-size:.78rem;color:#e7ddf5;
+      background:rgba(107,47,165,.32);border:1px solid rgba(154,78,224,.5);border-radius:12px;padding:11px 16px;}
+    .db-controls button:disabled{opacity:.3;cursor:default;}
+    .db-count{font-family:"Cinzel",serif;color:#b9a6dd;font-size:.72rem;letter-spacing:.12em;}
+    @media (max-width:640px){ .db-page{padding:28px 22px 30px 32px;} .db-page h2{font-size:1.7rem;} }
   </style>
 </head>
 <body>
@@ -135,60 +154,74 @@
   </footer>
   <script src="main.js"></script>
 
-  <!-- ===== Het dagboek van het archief ===== -->
-  <div class="diary-modal" id="diaryModal" role="dialog" aria-modal="true" aria-label="Het dagboek van het archief">
-    <div class="diary-book">
-      <button class="diary-close" id="diaryClose" aria-label="Sluiten">&#10005;</button>
-      <div class="diary-page dfade" id="diaryPage"></div>
-      <div class="diary-nav">
-        <button id="diaryPrev">&lsaquo; Vorige</button>
-        <span class="diary-count" id="diaryCount"></span>
-        <button id="diaryNext">Volgende &rsaquo;</button>
+
+  <!-- ===== Het opendraaiende dagboek ===== -->
+  <div class="db-modal" id="diaryModal" role="dialog" aria-modal="true" aria-label="Het dagboek van het archief">
+    <button class="db-x" id="diaryClose" aria-label="Sluiten">&#10005;</button>
+    <div class="db-stage">
+      <div class="db-book" id="dbBook">
+        <div class="db-paper"></div>
+        <div class="db-page" id="dbPage"></div>
+        <div class="db-cover" id="dbCover" style="background-image:url('cover.png')">
+          <span class="db-hint">Tik om te openen</span>
+        </div>
       </div>
+    </div>
+    <div class="db-controls">
+      <button id="dbPrev">&lsaquo; Vorige</button>
+      <span class="db-count" id="dbCount"></span>
+      <button id="dbNext">Volgende &rsaquo;</button>
     </div>
   </div>
 
   <script>
   (function(){
     var pages=[
-      {e:"Het verborgen dagboek", t:"Het Archief",
-       b:"Wie dit leest, heeft gevonden wat verborgen had moeten blijven. Dit dagboek hoort bij het archief van Nevermore \u2014 de geschiedenis die niet op de offici\u00eble website staat. Blader verder, als je durft."},
+      {e:"Persoonlijk dagboek", t:"Het Archief",
+       b:"Dit boek hoort niet op de offici\u00eble website van Nevermore Academy. Wie het opent, leest wat verborgen had moeten blijven. Blader verder \u2014 maar onthoud waar je begon."},
       {e:"Anno 1791", t:"Een Toevlucht",
-       b:"Nevermore Academy werd gesticht voor hen die nergens anders welkom waren. Achter de poorten in Jericho leerden de eerste leerlingen dat anders-zijn geen vloek is, maar een gave. De buitenwereld noemde hen outcasts; hier noemden ze elkaar familie."},
+       b:"Nevermore werd gesticht voor hen die nergens anders welkom waren. Achter de poorten in Jericho leerden de eerste leerlingen dat anders-zijn geen vloek is, maar een gave. De wereld noemde hen outcasts; hier noemden ze elkaar familie."},
       {e:"De leerlingen", t:"De Outcasts",
        b:"Onder dit dak leven talenten die de gewone wereld niet kan plaatsen: zij die de nacht beter zien dan de dag, zij die planten laten fluisteren, zij die de toekomst in inkt vangen. Elke leerling draagt een geheim \u2014 en de school bewaart ze allemaal."},
       {e:"1991", t:"De Brand",
-       b:"Niemand spreekt graag over de brand in de noordvleugel. De offici\u00eble lezing noemt een omgevallen kaars. Het archief bewaart een ander verhaal: over een experiment dat te ver ging, en een kamer die sindsdien verzegeld bleef. Sommige deuren blijven beter dicht."},
+       b:"Niemand spreekt graag over de brand in de noordvleugel. De offici\u00eble lezing noemt een omgevallen kaars. Het archief bewaart een ander verhaal: over een experiment dat te ver ging, en een kamer die sindsdien verzegeld bleef."},
       {e:"Heden", t:"Directrice Weems",
        b:"Vandaag waakt directrice Larissa Weems over Nevermore. \u201cDeze school is geen gebouw,\u201d schrijft ze, \u201cmaar een belofte: dat je hier eindelijk thuiskomt.\u201d Wat zij precies beschermt, staat in geen enkel lesboek."},
       {e:"Een waarschuwing", t:"Sluit het boek",
        b:"Je hebt het archief gezien. Onthoud: niet alles wat geschreven staat, mocht ooit gelezen worden. Sluit het dagboek \u2014 en kijk voortaan twee keer naar wat een gewone schoolwebsite lijkt."}
     ];
-    var i=0;
-    var modal=document.getElementById("diaryModal");
-    var pageEl=document.getElementById("diaryPage");
-    var prev=document.getElementById("diaryPrev");
-    var next=document.getElementById("diaryNext");
-    var count=document.getElementById("diaryCount");
-    function render(){
-      var p=pages[i];
-      pageEl.innerHTML='<div class="de">'+p.e+'</div><h2>'+p.t+'</h2><p>'+p.b+'</p>';
-      pageEl.classList.remove("dfade"); void pageEl.offsetWidth; pageEl.classList.add("dfade");
-      count.textContent="Bladzijde "+(i+1)+" / "+pages.length;
-      prev.disabled=(i===0); next.disabled=(i===pages.length-1);
+    function el(id){return document.getElementById(id);}
+    var modal=el("diaryModal"), book=el("dbBook"), cover=el("dbCover"),
+        page=el("dbPage"), prev=el("dbPrev"), next=el("dbNext"), count=el("dbCount");
+    var i=0, animating=false, opened=false;
+    function render(n){
+      var p=pages[n], first=p.b.charAt(0), rest=p.b.slice(1);
+      page.innerHTML='<div class="db-de">'+p.e+'</div><h2>'+p.t+'</h2><div class="db-rule"></div>'+
+        '<p><span class="db-dropcap">'+first+'</span>'+rest+'</p>'+
+        '<div class="db-folio">Bladzijde '+(n+1)+' van '+pages.length+'</div>';
+      count.textContent=(n+1)+" / "+pages.length;
+      prev.disabled=(n===0); next.disabled=(n===pages.length-1);
     }
-    function open(){ i=0; render(); modal.classList.add("open"); }
-    function close(){ modal.classList.remove("open"); }
-    document.getElementById("openDiary").addEventListener("click",open);
-    document.getElementById("diaryClose").addEventListener("click",close);
-    prev.addEventListener("click",function(){ if(i>0){i--;render();} });
-    next.addEventListener("click",function(){ if(i<pages.length-1){i++;render();} });
-    modal.addEventListener("click",function(e){ if(e.target===modal) close(); });
+    function turn(dir){
+      if(animating) return; var n=i+dir; if(n<0||n>=pages.length) return; animating=true;
+      page.classList.add("turn-out");
+      setTimeout(function(){ i=n; render(i); page.classList.remove("turn-out"); page.classList.add("turn-in");
+        setTimeout(function(){ page.classList.remove("turn-in"); animating=false; },560); },470);
+    }
+    function openBook(){ book.classList.add("open"); opened=true; }
+    function openModal(){ i=0; render(0); book.classList.remove("open"); opened=false; modal.classList.add("open"); }
+    function closeModal(){ modal.classList.remove("open"); }
+    el("openDiary").addEventListener("click",openModal);
+    el("diaryClose").addEventListener("click",closeModal);
+    cover.addEventListener("click",openBook);
+    next.addEventListener("click",function(){ if(!opened){ openBook(); return; } turn(1); });
+    prev.addEventListener("click",function(){ if(!opened){ openBook(); return; } turn(-1); });
+    modal.addEventListener("click",function(e){ if(e.target===modal) closeModal(); });
     document.addEventListener("keydown",function(e){
-      if(!modal.classList.contains("open"))return;
-      if(e.key==="Escape")close();
-      if(e.key==="ArrowRight"&&i<pages.length-1){i++;render();}
-      if(e.key==="ArrowLeft"&&i>0){i--;render();}
+      if(!modal.classList.contains("open")) return;
+      if(e.key==="Escape") closeModal();
+      else if(e.key==="ArrowRight") next.click();
+      else if(e.key==="ArrowLeft") prev.click();
     });
   })();
   </script>
